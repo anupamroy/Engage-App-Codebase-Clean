@@ -10,6 +10,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+
 import org.apache.logging.log4j.Logger;
 import org.hibernate.validator.internal.util.logging.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,11 @@ import com.engage.model.UserRoles;
 import com.engage.util.AdvancedEncryptionStandard;
 import com.engage.util.JsonMessage;
 
+
+import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.util.JSONPObject;
+import com.fasterxml.jackson.core.JsonToken;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
@@ -240,6 +246,7 @@ public String portalURL;
   public ResponseEntity<String> receiveBody(@RequestParam("From") String From, @RequestParam("Body") String Body)
   {
 	  JsonMessage response=new JsonMessage();
+	  JsonMessage response1=new JsonMessage();
 	  HttpHeaders responseHeaders = new HttpHeaders();
 	  String fromuser=From;
 	  String userbody=Body;
@@ -292,9 +299,18 @@ public String portalURL;
 		    	  resmessage="Thank you for joining. You will start receiving messages.";
 		      
 		      }
-	    	  String res=restTemplate.postForObject("http://localhost:8080/PatientMicroservice/api/v1/patientreply", data1,String.class );
+		      String res=restTemplate.postForObject("http://localhost:8080/PatientMicroservice/api/v1/patientreply", data1,String.class );
 //	    	String res=restTemplate.postForObject("http://localhost:8081/api/v1/patientreply", data1,String.class );
-	    		 
+		      JsonFactory factory = new JsonFactory();
+			 JsonParser parser = factory.createParser(res);
+			 while (!parser.isClosed()) {
+				 JsonToken token = parser.nextToken();
+				 if (JsonToken.FIELD_NAME.equals(token) && "message".equals(parser.getCurrentName())) {
+						token = parser.nextToken();
+						resmessage=parser.getText();
+						//System.out.println(resmessage);
+					} 
+			 }
 		      return new ResponseEntity<String> (resmessage, responseHeaders,HttpStatus.OK);
 		  }
 		  else

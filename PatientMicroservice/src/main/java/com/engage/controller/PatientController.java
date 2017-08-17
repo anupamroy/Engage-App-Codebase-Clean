@@ -589,7 +589,7 @@ public class PatientController {
 	 }
 	 else
 	 {
-		 response.setMessage("Thank you for your reply");
+		 response.setMessage("Sorry you are not registered as a patient in our system.Thank you for your reply");
 			response.setStatuscode(200);
 			return response; 
 	 }
