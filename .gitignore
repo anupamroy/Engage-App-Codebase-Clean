@@ -1,3 +1,20 @@
+
+
+#=========================
+#Repository restrictions
+#=========================
+
+/ApiGateway/target/
+/EmailMicroservice/target/
+/PathwayMicroservice/target/
+/PatientMicroservice/target/
+/ScheduleMicroservice/target/
+/UserMicroservice/target/
+
+
+/*/.classpath
+/*/.project
+
 # Windows image file caches
 Thumbs.db
 ehthumbs.db
